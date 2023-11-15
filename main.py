@@ -1,18 +1,21 @@
 import sys
 from random import randint
 
-from PyQt5 import uic
-from PyQt5.QtCore import Qt, QPoint
-from PyQt5.QtGui import QPainter
+from PyQt5.QtCore import QPoint
+from PyQt5.QtGui import QPainter, QColor
 from PyQt5.QtWidgets import QApplication, QWidget
 
-ui_file = 'UI.ui'
+from CirclesUI import Ui_Circles
 
 
-class YellowCircles(QWidget):
+def random_color():
+    return QColor(randint(0, 255), randint(0, 255), randint(0, 255))
+
+
+class Circles(QWidget, Ui_Circles):
     def __init__(self):
         super().__init__()
-        uic.loadUi(ui_file, self)
+        self.setupUi(self)
         self.draw = False
         self.draw_circles.pressed.connect(self.draw_circles_pressed)
 
@@ -20,7 +23,7 @@ class YellowCircles(QWidget):
         if self.draw:
             painter = QPainter(self)
             for _ in range(randint(1, 10)):
-                painter.setBrush(Qt.yellow)
+                painter.setBrush(random_color())
                 radius = randint(20, 100)
                 pos = QPoint(randint(radius, self.width() - radius), randint(radius, self.height() - radius))
                 painter.drawEllipse(pos, radius, radius)
@@ -33,6 +36,6 @@ class YellowCircles(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    w = YellowCircles()
+    w = Circles()
     w.show()
     sys.exit(app.exec_())
